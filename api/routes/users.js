@@ -44,7 +44,7 @@ router.post('/login', (req, res) => {
 					message: 'Auth Failed'
 				});
 			}
-			User.comparePassword(req.body.password, user.password, (err, isMatch) => {
+			user.comparePassword(req.body.password, (err, isMatch) => {
 				if (err) {
 					res.status(401).json({
 						message: 'Auth Failed'
@@ -56,7 +56,7 @@ router.post('/login', (req, res) => {
 					});
 					res.json({
 						success: true,
-						token: 'JWT ' + token,
+						token: token,
 						user: {
 							id: user._id,
 							name: user.name,
