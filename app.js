@@ -2,7 +2,6 @@ const express = require('express');
 const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const passport = require('passport');
 const mongoose = require('mongoose');
 
 const app = express();
@@ -24,11 +23,14 @@ app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use(passport.initialize());
-
-require('./config/passport')(passport);
 
 const usersRoute = require('./api/routes/users');
+
+app.get('/', (req, res)=>{
+	console.log('mina')
+	res.send('mina')
+	
+})
 
 app.use('/users', usersRoute);
 

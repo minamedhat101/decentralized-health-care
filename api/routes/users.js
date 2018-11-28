@@ -1,5 +1,5 @@
 const express = require('express');
-const passport = require('passport');
+const checkAuth = require('../middleware/check-auth');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
@@ -75,7 +75,7 @@ router.post('/login', (req, res) => {
 		});
 });
 
-router.delete('/:id', passport.authenticate(jwt, {session: false}), (req, res) => {
+router.delete('/:id', (req, res) => {
 	User.remove({ _id: req.params.id })
 		.exec()
 		.then(result => {
