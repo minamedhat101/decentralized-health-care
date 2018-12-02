@@ -75,6 +75,10 @@ router.post('/login', (req, res) => {
 		});
 });
 
+router.get('/profile', checkAuth, (req, res)=>{
+	res.status(200).json({name:'MINA'})
+})
+
 router.delete('/:id', (req, res) => {
 	User.remove({ _id: req.params.id })
 		.exec()

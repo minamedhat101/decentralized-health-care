@@ -1,11 +1,15 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
-const UserSchema = mongoose.Schema({
+const EmployeeSchema = mongoose.Schema({
 	email: {
 		type: String, required: true, unique: true,
 		match: /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?/
-	},
+  },
+  nationalID: {
+    type: String,
+    required: true
+  },
 	gender: {
 		type: String,
 		required: true,
@@ -37,13 +41,21 @@ const UserSchema = mongoose.Schema({
 		required: true
 	},
 	joinedOn: {
-		type: Date,
-		default: Date.now
-	}
+    type: Date
+  },
+  qulaifications: {
+    type: [String]
+  },
+  speciality: {
+    type: String
+  },
+  departmentName: { type: Schema.Types.ObjectId, ref: 'Department' },
+  employeeTypeName: { type: Schema.Types.ObjectId, ref: 'EmployeeType' }
+
 });
 
 
-UserSchema.pre('save', function (next) {
+EmployeeSchema.pre('save', function (next) {
 	var user = this;
 
 	// only hash the password if it has been modified (or is new)
@@ -64,7 +76,7 @@ UserSchema.pre('save', function (next) {
 	});
 });
 
-UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+EmployeeSchema.methods.comparePassword = function (candidatePassword, cb) {
 	bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
 		if (err) return cb(err);
 		cb(null, isMatch);
@@ -72,4 +84,4 @@ UserSchema.methods.comparePassword = function (candidatePassword, cb) {
 };
 
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model('Employee', EmployeeSchema); 

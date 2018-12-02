@@ -18,6 +18,7 @@ mongoose.connect(config.database,
 	if (err) return console.log(err);
 	console.log('Connected to DB');
 });
+
 app.use(cors());
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
