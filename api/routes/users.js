@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-const config = require('../../config/database');
+const config = require('../config/database');
 const User = require('../models/user');
 
 router.post('/signup', (req, res) => {
@@ -17,7 +17,17 @@ router.post('/signup', (req, res) => {
 			} else {
 				const user = new User({
 					email: req.body.email,
-					password: req.body.password
+					password: req.body.password,
+					gender: req.body.gender,
+					fristName: req.body.fristName,
+					lastName: req.body.lastName,
+					dateOfBirth: req.body.dateOfBirth,
+					phoneNumber: req.body.phoneNumber,
+					address: {
+						street: req.body.street,
+						city: req.body.city,
+						state: req.body.state
+					}
 				});
 
 				user.save()
@@ -75,8 +85,8 @@ router.post('/login', (req, res) => {
 		});
 });
 
-router.get('/profile', checkAuth, (req, res)=>{
-	res.status(200).json({name:'MINA'})
+router.get('/profile', checkAuth, (req, res) => {
+	res.status(200).json({ name: 'MINA' })
 })
 
 router.delete('/:id', (req, res) => {

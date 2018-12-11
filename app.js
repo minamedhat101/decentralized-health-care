@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const app = express();
 
-const config = require('./config/database');
+const config = require('./api/config/database');
 
 //mongoose.connect('mongodb://localhost:27017/healthCare');
 
