@@ -19,7 +19,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let complain = await Complain.findById(req.params.id)
       .populate('hospital')
@@ -33,7 +33,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.get('/search/:query', (req, res) => {
+router.get('/search/:query', async (req, res) => {
   try {
     const query = req.params.query;
     let hospital = await Hospital.findOne({ name: query }).exec();
