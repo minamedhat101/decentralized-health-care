@@ -1,4 +1,4 @@
 module.exports = {
-	database: 'mongodb://localhost:27017/healthcare',
+	database: 'mongodb://<dbuser>:<dbpassword>@ds121295.mlab.com:21295/healthcare',
 	secret: 'mysecret'
 };
