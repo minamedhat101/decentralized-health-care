@@ -7,7 +7,7 @@ const router = express.Router();
 const config = require('../config/database');
 const Employee = require('../models/employee');
 
-router.post('/signup', (req, res) => {
+router.post('/signup', async (req, res) => {
 	Employee.find({ email: req.body.email }).exec()
 		.then(employee => {
 			if (employee.length >= 1) {
@@ -48,7 +48,7 @@ router.post('/signup', (req, res) => {
 		});
 });
 
-router.post('/login', (req, res) => {
+router.post('/login', async (req, res) => {
 	Employee.findOne({ email: req.body.email }).exec()
 		.then(employee => {
 			if (employee.length > 1) {
@@ -148,7 +148,7 @@ router.get('/:query', async (req, res) => {
 	}
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', async (req, res) => {
 	Employee.remove({ _id: req.params.id })
 		.exec()
 		.then(result => {

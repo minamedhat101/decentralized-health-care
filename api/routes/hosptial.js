@@ -14,7 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let hospital = await Hospital.findById(req.params.id).populate('departments').exec();
     res.status(200).json(hospital);
@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.get('/search/:query', (req, res) => {
+router.get('/search/:query', async (req, res) => {
   try {
     const query = req.params.query;
     let department = await Department.findOne({ name: query }).exec();

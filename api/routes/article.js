@@ -6,7 +6,7 @@ const util = require('util')
 
 const router = express.Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   Article.find().exec()
     .then(articles => {
       res.status(200).json(articles);
@@ -19,7 +19,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   Article.findById({ _id: req.params.id }).populate('author').exec()
     .then(article => {
       // let response = article.map();

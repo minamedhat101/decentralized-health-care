@@ -13,7 +13,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-router.get('/:id', (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     let type = await RoomType.findById(req.params.id).exec();
     res.status(200).json(type);
@@ -23,7 +23,7 @@ router.get('/:id', (req, res) => {
   }
 });
 
-router.get('/search/:name', (req, res) => {
+router.get('/search/:name', async (req, res) => {
   try {
     const name = req.params.name;
     let type = await RoomType.find({name: name}).exec();
