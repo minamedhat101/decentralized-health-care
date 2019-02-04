@@ -5,9 +5,9 @@ const EmployeeTypeSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  accessLevel: {
-    type: Number
-  },
+  description: {
+    type: String
+  }
 });
 
 module.exports = mongoose.model('EmployeeType', EmployeeTypeSchema);

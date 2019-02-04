@@ -8,11 +8,8 @@ const RoomSchema = mongoose.Schema({
   description: {
     type: String
   },
-  available: {
-    type: Boolean
-  },
-  roomType:{ type: Schema.Types.ObjectId, ref: 'RoomType' },
-  hospital: { type: Schema.Types.ObjectId, ref: 'Hospital' },
+  roomType: { type: mongoose.Schema.Types.ObjectId, ref: 'RoomType' },
+  hospital: { type: mongoose.Schema.Types.ObjectId, ref: 'Hospital' },
 
 });
 

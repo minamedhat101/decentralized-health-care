@@ -39,12 +39,13 @@ const UserSchema = mongoose.Schema({
 	joinedOn: {
 		type: Date,
 		default: Date.now
-	}
+	},
+	userType: { type: mongoose.Schema.Types.ObjectId, ref: 'UserType' },
 });
 
 
 UserSchema.pre('save', function (next) {
-	var user = this;
+	let user = this;
 
 	// only hash the password if it has been modified (or is new)
 	if (!user.isModified('password')) return next();

@@ -23,8 +23,8 @@ const TestSchema = mongoose.Schema({
     type: String,
     required: true
   },
-  employee: { type: Schema.Types.ObjectId, ref: 'Employee' },
-  testType: { type: Schema.Types.ObjectId, ref: 'TestType' },
+  employee: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
+  testType: { type: mongoose.Schema.Types.ObjectId, ref: 'TestType' },
 }, { toObject: { virtuals: true }, toJson: { virtuals: true } });
 
 TestSchema.virtual('patient', {

@@ -25,7 +25,20 @@ app.use('/uploads', express.static('uploads'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-const usersRoute = require('./api/routes/users');
+
+
+
+const appointmentRoute = require('./api/routes/users');
+const articleRoute = require('./api/routes/article');
+const complainRoute = require('./api/routes/complain');
+const departmentRoute = require('./api/routes/department');
+const employeeRoute = require('./api/routes/employee');
+const hospitalRoute = require('./api/routes/hospital');
+const roomRoute = require('./api/routes/room');
+const roomTypeRoute = require('./api/routes/roomType');
+const scheduleRoute = require('./api/routes/schedule');
+const userRoute = require('./api/routes/users');
+const userTypeRoute = require('./api/routes/userType');
 
 app.get('/', (req, res)=>{
 	console.log('mina')
@@ -33,7 +46,17 @@ app.get('/', (req, res)=>{
 	
 })
 
-app.use('/users', usersRoute);
+app.use('/user', userRoute);
+app.use('/employee', employeeRoute);
+app.use('/userType', userTypeRoute);
+app.use('/article', articleRoute);
+app.use('/appointment', appointmentRoute);
+app.use('/complain', complainRoute);
+app.use('/department', departmentRoute);
+app.use('/hospital', hospitalRoute);
+app.use('/room', roomRoute);
+app.use('/roomType', roomTypeRoute);
+app.use('/schedule', scheduleRoute);
 
 
 app.use((req, res, next) => {

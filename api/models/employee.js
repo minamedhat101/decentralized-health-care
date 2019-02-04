@@ -41,16 +41,18 @@ const EmployeeSchema = mongoose.Schema({
 		required: true
 	},
 	joinedOn: {
-    type: Date
+		type: Date,
+		default: Date.now
   },
   qulaifications: {
     type: [String]
   },
   speciality: {
     type: String
-  },
-  departmentName: { type: Schema.Types.ObjectId, ref: 'Department' },
-  employeeTypeName: { type: Schema.Types.ObjectId, ref: 'EmployeeType' }
+	},
+	hospital:{ type: mongoose.Schema.Types.ObjectId, ref: 'Hospital' },
+  department: { type: mongoose.Schema.Types.ObjectId, ref: 'Department' },
+	userType: { type: mongoose.Schema.Types.ObjectId, ref: 'UserType' },
 
 });
 

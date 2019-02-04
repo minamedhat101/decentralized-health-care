@@ -1,22 +1,21 @@
 const express = require('express');
-const checkAuth = require('../middleware/checkAuthUser');
-const role = require('../middleware/authorize');
 const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/checkAuthUser');
 
 const router = express.Router();
 
 const config = require('../config/database');
-const User = require('../models/user');
+const Employee = require('../models/employee');
 
-router.post('/signup', (req, res,) => {
-	User.find({ email: req.body.email }).exec()
-		.then(user => {
-			if (user.length >= 1) {
+router.post('/signup', (req, res) => {
+	Employee.find({ email: req.body.email }).exec()
+		.then(employee => {
+			if (employee.length >= 1) {
 				return res.status(409).json({
 					message: 'Mail exists'
 				});
 			} else {
-				const user = new User({
+				const employee = new Employee({
 					email: req.body.email,
 					password: req.body.password,
 					gender: req.body.gender,
@@ -24,7 +23,8 @@ router.post('/signup', (req, res,) => {
 					lastName: req.body.lastName,
 					dateOfBirth: req.body.dateOfBirth,
 					phoneNumber: req.body.phoneNumber,
-					userType: '5c470dc4267a0629246d686b',
+					nationalID: req.body.nationalID,
+					userType: req.body.userType,
 					address: {
 						street: req.body.street,
 						city: req.body.city,
@@ -32,11 +32,11 @@ router.post('/signup', (req, res,) => {
 					}
 				});
 
-				user.save()
+				employee.save()
 					.then(result => {
 						console.log(result);
 						res.status(201).json({
-							message: 'Handling POST requests to /users',
+							message: 'Handling POST requests to /employees',
 							createdProduct: result
 						});
 					})
@@ -49,31 +49,31 @@ router.post('/signup', (req, res,) => {
 });
 
 router.post('/login', (req, res) => {
-	User.findOne({ email: req.body.email }).exec()
-		.then(user => {
-			if (user.length > 1) {
+	Employee.findOne({ email: req.body.email }).exec()
+		.then(employee => {
+			if (employee.length > 1) {
 				res.status(401).json({
 					message: 'Auth Failed'
 				});
 			}
-			user.comparePassword(req.body.password, (err, isMatch) => {
+			employee.comparePassword(req.body.password, (err, isMatch) => {
 				if (err) {
 					res.status(401).json({
 						message: 'Auth Failed'
 					});
 				}
 				if (isMatch) {
-					const token = jwt.sign({ data: user }, config.secret, {
+					const token = jwt.sign({ data: employee }, config.secret, {
 						expiresIn: 604800
 					});
 					res.json({
 						success: true,
 						token: token,
-						user: {
-							id: user._id,
-							name: user.name,
-							username: user.username,
-							email: user.email
+						employee: {
+							id: employee._id,
+							name: employee.name,
+							username: employee.username,
+							email: employee.email
 						}
 					});
 				} else {
@@ -87,7 +87,8 @@ router.post('/login', (req, res) => {
 		});
 });
 
-router.get('/profile', role(['user']), async (req, res) => {
+
+router.get('/profile', checkAuth, async (req, res) => {
 	try {
 		return res.status(200).json({ result: req.userData })
 	} catch (err) {
@@ -100,9 +101,9 @@ router.get('/profile', role(['user']), async (req, res) => {
 
 router.get('/', async (req, res) => {
 	try {
-		let user = await User.find().exec();
-		if (user) {
-			return res.status(200).json({ result: user })
+		let employee = await Employee.find().exec();
+		if (employee) {
+			return res.status(200).json({ result: employee })
 		} else {
 			res.status(404).json({ message: "No valid entry found for provided ID" });
 		}
@@ -116,9 +117,9 @@ router.get('/', async (req, res) => {
 
 router.get('/profile/:id', async (req, res) => {
 	try {
-		let user = await User.findById(req.params.id).exec();
-		if (user) {
-			return res.status(200).json({ result: user })
+		let employee = await Employee.findById(req.params.id).exec();
+		if (employee) {
+			return res.status(200).json({ result: employee })
 		} else {
 			res.status(404).json({ message: "No valid entry found for provided ID" });
 		}
@@ -133,9 +134,9 @@ router.get('/profile/:id', async (req, res) => {
 router.get('/:query', async (req, res) => {
 	try {
 		const query = req.params.query;
-		let user = await User.find({$or: [{fristName: query}, {email: query}, {lastName: query}]}).exec();
-		if (user) {
-			return res.status(200).json({ result: user })
+		let employee = await Employee.find({$or: [{fristName: query}, {email: query}, {lastName: query}]}).exec();
+		if (employee) {
+			return res.status(200).json({ result: employee })
 		} else {
 			res.status(404).json({ message: "No valid entry found for provided query" });
 		}
@@ -148,11 +149,11 @@ router.get('/:query', async (req, res) => {
 })
 
 router.delete('/:id', (req, res) => {
-	User.remove({ _id: req.params.id })
+	Employee.remove({ _id: req.params.id })
 		.exec()
 		.then(result => {
 			res.status(200).json({
-				message: 'User deleted',
+				message: 'employee deleted',
 				result: result
 			});
 		})
@@ -163,6 +164,5 @@ router.delete('/:id', (req, res) => {
 			});
 		});
 });
-
 
 module.exports = router;

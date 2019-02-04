@@ -12,9 +12,13 @@ const ComplainSchema = mongoose.Schema({
   answerDetails: {
     type: String
   },
-  answeredBy:{ type: Schema.Types.ObjectId, ref: 'Employee' },
-  user: { type: Schema.Types.ObjectId, ref: 'User' },
-  hospital: { type: Schema.Types.ObjectId, ref: 'Hospital' },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  answeredBy: { type: mongoose.Schema.Types.ObjectId, ref: 'Employee' },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+  hospital: { type: mongoose.Schema.Types.ObjectId, ref: 'Hospital' },
 
 });
 
