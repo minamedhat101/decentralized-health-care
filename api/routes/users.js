@@ -22,7 +22,7 @@ router.post('/signup', (req, res,) => {
 					lastName: req.body.lastName,
 					dateOfBirth: req.body.dateOfBirth,
 					phoneNumber: req.body.phoneNumber,
-					userType: '5c470dc4267a0629246d686b',
+					userType: '5c5830f11d09ac00175a6b45',
 					address: {
 						street: req.body.street,
 						city: req.body.city,
@@ -63,7 +63,7 @@ router.post('/login', (req, res) => {
 				if (isMatch) {
 					const token = jwt.sign({ data: user }, process.env.SECRET, {
 						expiresIn: 604800
-					});
+					}); 
 					res.json({
 						success: true,
 						token: token,
