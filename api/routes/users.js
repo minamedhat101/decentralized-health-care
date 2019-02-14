@@ -55,13 +55,12 @@ router.post('/login', (req, res) => {
 				});
 			} else {
 				user.comparePassword(req.body.password, (err, isMatch) => {
-					if (err) {
+					if (!isMatch) {
 						res.status(401).json({
 							message: 'Auth Failed',
 							err: err
 						});
-					}
-					if (isMatch) {
+					} else {
 						const token = jwt.sign({ data: user }, process.env.SECRET, {
 							expiresIn: 604800
 						});
@@ -75,8 +74,6 @@ router.post('/login', (req, res) => {
 								email: user.email
 							}
 						});
-					} else {
-						return res.json({ success: false, msg: err });
 					}
 				});
 			}
