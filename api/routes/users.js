@@ -6,7 +6,7 @@ const router = express.Router();
 
 const User = require('../models/user');
 
-router.post('/signup', (req, res,) => {
+router.post('/signup', (req, res, ) => {
 	User.find({ email: req.body.email }).exec()
 		.then(user => {
 			if (user.length >= 1) {
@@ -53,31 +53,33 @@ router.post('/login', (req, res) => {
 				res.status(401).json({
 					message: 'Auth Failed'
 				});
+			} else {
+				user.comparePassword(req.body.password, (err, isMatch) => {
+					if (err) {
+						res.status(401).json({
+							message: 'Auth Failed'
+						});
+					}
+					if (isMatch) {
+						const token = jwt.sign({ data: user }, process.env.SECRET, {
+							expiresIn: 604800
+						});
+						res.status(200).json({
+							success: true,
+							token: token,
+							user: {
+								id: user._id,
+								name: user.name,
+								username: user.username,
+								email: user.email
+							}
+						});
+					} else {
+						return res.json({ success: false, msg: err });
+					}
+				});
 			}
-			user.comparePassword(req.body.password, (err, isMatch) => {
-				if (err) {
-					res.status(401).json({
-						message: 'Auth Failed'
-					});
-				}
-				if (isMatch) {
-					const token = jwt.sign({ data: user }, process.env.SECRET, {
-						expiresIn: 604800
-					}); 
-					res.status(200).json({
-						success: true,
-						token: token,
-						user: {
-							id: user._id,
-							name: user.name,
-							username: user.username,
-							email: user.email
-						}
-					});
-				} else {
-					return res.json({ success: false, msg: err });
-				}
-			});
+
 		})
 		.catch(err => {
 			console.log(err);
@@ -131,7 +133,7 @@ router.get('/profile/:id', async (req, res) => {
 router.get('/:query', async (req, res) => {
 	try {
 		const query = req.params.query;
-		let user = await User.find({$or: [{fristName: query}, {email: query}, {lastName: query}]}).exec();
+		let user = await User.find({ $or: [{ fristName: query }, { email: query }, { lastName: query }] }).exec();
 		if (user) {
 			return res.status(200).json({ result: user })
 		} else {
@@ -163,23 +165,23 @@ router.delete('/:id', (req, res) => {
 });
 
 router.patch('/:id', async (req, res) => {
-  try {
-    const id = req.params.id;
-    const updateOps = {};
-    for (const ops of req.body) {
-      updateOps[ops.propName] = ops.value;
-    }
-    let user = await User.update({ _id: id }, { $set: updateOps }).exec();
-    res.status(200).json({
-      message: "user updated",
-      request: {
-        result: user
-      }
-    });
-  } catch (err) {
-    console.log(err);
-    res.status(500).json({ error: err });
-  }
+	try {
+		const id = req.params.id;
+		const updateOps = {};
+		for (const ops of req.body) {
+			updateOps[ops.propName] = ops.value;
+		}
+		let user = await User.update({ _id: id }, { $set: updateOps }).exec();
+		res.status(200).json({
+			message: "user updated",
+			request: {
+				result: user
+			}
+		});
+	} catch (err) {
+		console.log(err);
+		res.status(500).json({ error: err });
+	}
 });
 
 module.exports = router;
