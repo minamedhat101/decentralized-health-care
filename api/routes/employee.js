@@ -4,7 +4,6 @@ const checkAuth = require('../middleware/checkAuthUser');
 
 const router = express.Router();
 
-const config = require('../config/database');
 const Employee = require('../models/employee');
 
 router.post('/signup', async (req, res) => {
@@ -63,7 +62,7 @@ router.post('/login', async (req, res) => {
 					});
 				}
 				if (isMatch) {
-					const token = jwt.sign({ data: employee }, config.secret, {
+					const token = jwt.sign({ data: employee }, process.env.SECRET, {
 						expiresIn: 604800
 					});
 					res.json({
@@ -134,7 +133,7 @@ router.get('/profile/:id', async (req, res) => {
 router.get('/:query', async (req, res) => {
 	try {
 		const query = req.params.query;
-		let employee = await Employee.find({$or: [{fristName: query}, {email: query}, {lastName: query}]}).exec();
+		let employee = await Employee.find({ $or: [{ fristName: query }, { email: query }, { lastName: query }] }).exec();
 		if (employee) {
 			return res.status(200).json({ result: employee })
 		} else {

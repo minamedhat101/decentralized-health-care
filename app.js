@@ -3,22 +3,22 @@ const morgan = require('morgan');
 const cors = require('cors');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
+const path = require('path');
+const dotenv = require('dotenv');
+dotenv.config({ path: path.join(__dirname, '.env') });
 
 const app = express();
 
-const config = require('./api/config/database');
-
 //mongoose.connect('mongodb://localhost:27017/healthCare');
-
-mongoose.connect(config.database,
+// console.log(process.env)
+mongoose.connect(process.env.MONGODB_URI,
 	{
 		useCreateIndex: true,
-		useNewUrlParser: true 
+		useNewUrlParser: true
 	}, err => {
-	if (err) return console.log(err);
-	console.log('Connected to DB');
-});
-
+		if (err) return console.log(err);
+		console.log('Connected to DB');
+	});
 app.use(cors());
 app.use(morgan('dev'));
 app.use('/uploads', express.static('uploads'));
@@ -40,10 +40,10 @@ const scheduleRoute = require('./api/routes/schedule');
 const userRoute = require('./api/routes/users');
 const userTypeRoute = require('./api/routes/userType');
 
-app.get('/', (req, res)=>{
+app.get('/', (req, res) => {
 	console.log('mina')
 	res.send('mina')
-	
+
 })
 
 app.use('/user', userRoute);

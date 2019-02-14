@@ -1,11 +1,9 @@
 const express = require('express');
-const checkAuth = require('../middleware/checkAuthUser');
 const role = require('../middleware/authorize');
 const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
-const config = require('../config/database');
 const User = require('../models/user');
 
 router.post('/signup', (req, res,) => {
@@ -63,7 +61,7 @@ router.post('/login', (req, res) => {
 					});
 				}
 				if (isMatch) {
-					const token = jwt.sign({ data: user }, config.secret, {
+					const token = jwt.sign({ data: user }, process.env.SECRET, {
 						expiresIn: 604800
 					});
 					res.json({
@@ -164,5 +162,24 @@ router.delete('/:id', (req, res) => {
 		});
 });
 
+router.patch('/:id', async (req, res) => {
+  try {
+    const id = req.params.id;
+    const updateOps = {};
+    for (const ops of req.body) {
+      updateOps[ops.propName] = ops.value;
+    }
+    let user = await User.update({ _id: id }, { $set: updateOps }).exec();
+    res.status(200).json({
+      message: "user updated",
+      request: {
+        result: user
+      }
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ error: err });
+  }
+});
 
 module.exports = router;

@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Room = require('./room');
 const Schedule = require('./schedule');
 
 const AppoinmentSchema = mongoose.Schema({

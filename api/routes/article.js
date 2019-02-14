@@ -2,7 +2,6 @@ const express = require('express');
 var ObjectId = require('mongoose').Types.ObjectId;
 const Article = require('../models/article');
 const Employee = require('../models/employee');
-const util = require('util')
 
 const router = express.Router();
 
