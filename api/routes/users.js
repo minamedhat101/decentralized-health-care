@@ -57,7 +57,8 @@ router.post('/login', (req, res) => {
 				user.comparePassword(req.body.password, (err, isMatch) => {
 					if (err) {
 						res.status(401).json({
-							message: 'Auth Failed'
+							message: 'Auth Failed',
+							err: err
 						});
 					}
 					if (isMatch) {
